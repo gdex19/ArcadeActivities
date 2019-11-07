@@ -67,6 +67,7 @@ class Cisc108Game(arcade.Window):
     def on_update(self, delta_time):
         self.logo_list.update()
 
+
 def main():
     window = Cisc108Game()
     window.setup()
