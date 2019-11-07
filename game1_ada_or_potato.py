@@ -65,11 +65,15 @@ class PotatoImage(arcade.Sprite):
 
 
 class AdaPotatoGame(arcade.Window):
+    timer: int
+
     def __init__(self):
         """ Initialize variables """
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE)
+        self.score = 0
         self.logo_list = None
         self.set_update_rate(1/3)
+        self.timer = 0
 
     def setup(self):
         """ Setup the game (or reset the game) """
@@ -77,15 +81,34 @@ class AdaPotatoGame(arcade.Window):
         self.logo_list = arcade.SpriteList()
         self.logo_list.append(AdaImage())
         self.logo_list.append(PotatoImage())
+        self.score = 0
+
+    def update_timer(self):
+        if self.timer < TIMER_MAXIMUM:
+            self.timer += 1
+        else:
+            self.timer = 0
 
     def on_draw(self):
         """ Called when it is time to draw the world """
         arcade.start_render()
         self.logo_list.draw()
+        output = f"Score: {self.score}"
+        arcade.draw_text(output, 20, 20, arcade.color.WHITE, 14)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.timer % 4 == 0:
+            if 109.5 < x < 390.5 and 28 < y < 472:
+                self.score += 1
+        elif self.timer % 4 == 2:
+            if 73 < x < 425 and 119.125 < y < 380.875:
+                self.score -= 1
 
     def on_update(self, delta_time):
         """ Called every frame of the game (1/GAME_SPEED times per second)"""
         self.logo_list.update()
+        self.update_timer()
+        self.on_draw()
 
 
 def main():
